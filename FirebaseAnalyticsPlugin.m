@@ -30,22 +30,13 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-- (void)onMessageFromCobaltController:(CobaltViewController *)viewController
-                              andData:(NSDictionary *)data {
-    [self onMessage:data];
-}
-
-- (void)onMessageFromWebLayerWithCobaltController:(CobaltViewController *)viewController
-                                          andData:(NSDictionary *)data {
-    [self onMessage:data];
-}
-
-- (void)onMessage:(NSDictionary *)message {
-    id action = message[@"action"];
-    id data = message[@"data"];
+- (void)onMessageFromWebView:(WebViewType)webView
+          inCobaltController:(nonnull CobaltViewController *)viewController
+                  withAction:(nonnull NSString *)action
+                        data:(nullable NSDictionary *)data
+          andCallbackChannel:(nullable NSString *)callbackChannel{
     
-    if (action != nil
-        && [action isKindOfClass:[NSString class]]
+    if ([action isKindOfClass:[NSString class]]
         && [@"logEvent" isEqualToString:action]
         && data != nil
         && [data isKindOfClass:[NSDictionary class]]) {
@@ -62,7 +53,6 @@
     
     NSLog(@"FirebaseAnalyticsPlugin - onMessage: %@\n\
           Possible issues: \n\
-          \t- action is empty, not a string or not supported (supported actions: logEvent), \n\
           \t- data object is empty or not an oject, \n\
           \t- data.event is empty or not a string, \n\
           \t- data.params is defined but not an object.", message);
